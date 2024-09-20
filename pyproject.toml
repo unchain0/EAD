@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "ead"
+version = "0.1.0"
+description = ""
+authors = ["Felippe <4drade@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flexx = "*"
+cefpython3 = "*"
+kivy = "*"
+pyopengl = "*"
+wxpython = "*"
+pyautogui = "*"
+pysimplegui = "*"
+psycopg2 = "*"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "*"
+ruff = "*"
+ruff-lsp = "*"
+types-wxpython = "*"
+types-psycopg2 = "*"
+jupyter = "*"
+nbqa = "*"
+
+[tool.mypy]
+strict = true
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
