@@ -15,6 +15,7 @@ wxpython = "*"
 pyautogui = "*"
 pysimplegui = "*"
 psycopg2 = "*"
+faker = "*"
 
 
 [tool.poetry.group.dev.dependencies]

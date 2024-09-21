@@ -1,6 +1,8 @@
 import os
+
 import psycopg2
-import logging
+
+from produto.models import Produto
 
 
 class Crud:
@@ -21,43 +23,32 @@ class Crud:
                 PRECO REAL NOT NULL
             );"""
         )
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s - %(levelname)s - %(message)s",
-            datefmt="%H:%M:%S",
-        )
 
-    def select(self) -> None:
-        self.cur.execute('SELECT * FROM public."PRODUTO"')
-        for row in self.cur.fetchall():
-            logging.info(row)
+    def select(self, code: int | None = None) -> list[tuple[Produto, ...]]:
+        query = 'SELECT * FROM public."PRODUTO";'
+        if code:
+            self.cur.execute(f"{query} WHERE CODIGO = {code};", (code,))
+        else:
+            self.cur.execute(query)
+        return self.cur.fetchall()
 
-    def insert(self, code: int, name: str, price: float) -> None:
+    def insert(self, produto: Produto) -> None:
         self.cur.execute(
             'INSERT INTO public."PRODUTO" ("CODIGO", "NOME", "PRECO") VALUES (%s, %s, %s)',
-            (code, name, price),
+            (produto.code, produto.name, produto.price),
         )
         self.conn.commit()
 
-    def update(self, code: int, name: str, price: float) -> None:
+    def update(self, produto: Produto) -> None:
         self.cur.execute(
             """
             UPDATE public."PRODUTO"
             SET "NOME" = %s, "PRECO" = %s
             WHERE "CODIGO" = %s
             """,
-            (name, price, code),
+            (produto.name, produto.price, produto.code),
         )
         self.conn.commit()
-
-        self.cur.execute(
-            """
-            SELECT "NOME", "PRECO" FROM public."PRODUTO"
-            WHERE "CODIGO" = %s
-            """,
-            (code,),
-        )
-        logging.info(self.cur.fetchone())
 
     def delete(self, *, code: int) -> None:
         self.cur.execute(
